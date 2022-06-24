@@ -77,3 +77,46 @@ Add the following line:
 ```
 Xft.dpi: 192
 ```
+### Step 8: Create the bspwm and sxhkd configuration files and install Alacritty
+Copy the files from the repo into their correct locations. Then install Alacritty:
+```
+sudo pacman -S alacritty
+```
+### Step 9: Reboot into the window manager
+### Step 10: Install graphics and network drivers (and make caps lock an escape key)
+Create /etc/X11/xorg.conf.d/10-keyboard.conf
+```
+vim /etc/X11/xorg.conf.d/10-keyboard.conf
+```
+See the repo file for what to add
+```
+sudo pacman -S nvidia
+```
+Create /etc/X11/xorg.conf.d/20-nvidia.conf
+```
+sudo vim /etc/X11/xorg.conf.d/20-nvidia.conf
+```
+See repo file for what to add
+Reboot.
+
+### Step 11: Install rofi, rofi themes, nvim (and vim-plug), picom-ibhagwan-git, pywal (and therefore pip), imagemagick, feh, pulseaudio, firefox, spotify, nerd fonts, dolphin, polybar, starship, pipes.sh, tty-clock-git, htop, gotop, neofetch, and fet.sh
+
+See the repo for their configuration files.
+
+After installing dolphin, install qt5ct. See this link for more info: https://wiki.archlinux.org/title/qt#Configuration_of_Qt5_apps_under_environments_other_than_KDE_Plasma
+```
+yay -S qt5ct
+```
+Set the following environment variable in ~/.bashrc:
+```
+export QT_QPA_PLATFORMTHEME=qt5ct
+```
+Install the breeze icon themes:
+```
+sudo pacman -S breeze-icons
+```
+Run qt5ct
+```
+qt5ct
+```
+Go to Icon Theme, select breeze, click apply. After opening Dolphin, the file icons should now be present.

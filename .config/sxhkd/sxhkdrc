@@ -1,0 +1,66 @@
+# --- APPLICATIONS --- #
+
+# Terminal
+super + Return
+    alacritty
+
+# Application Launcher
+super + @space
+    sh ~/.config/rofi/launchers/colorful/launcher.sh
+
+# Tdrop scratchpad
+super + s
+    tdrop -am -w 2000 -h 1000 -x 918 -y 580 alacritty
+
+# --- BSPWM --- #
+
+# Make sxhkd reload its configuration files:
+super + Escape
+    pkill -USR1 -x sxhkd
+
+# Restart bspwm
+super + shift + r
+    bspc wm -r
+
+# Close window
+super + shift + q
+    bspc node -c
+
+# Focus/Swap
+super + {_,shift + }{h,j,k,l}
+    bspc node -{f,s} {west,south,north,east}
+
+super + b
+    bspc node -s biggest.local
+
+# Set the window state
+super + {t,shift+t,p,f}
+    bspc node -t {tiled,floating,pseudo_tiled,fullscreen}
+
+# Manual Tiling
+super + ctrl + {h,j,k,l}
+    bspc node -p {west,south,north,east}
+
+super + ctrl + {1-9}
+    bspc node -o 0.{1-9}
+
+super + ctrl + space
+    bspc node -p cancel
+
+# Focus or send to the specified desktop
+super + {_,shift + }{1-9,0}
+    bspc {desktop -f,node -d} '^{1-9,10}'
+
+# Resize tiled windows and move floating windows
+
+# Expand a window by moving one of its side outward
+super + alt + {h,j,k,l}
+	bspc node -z {left -20 0,bottom 0 20,top 0 -20,right 20 0}
+
+# Contract a window by moving one of its side inward
+super + alt + shift + {h,j,k,l}
+	bspc node -z {right -20 0,top 0 20,bottom 0 -20,left 20 0}
+
+# Move a floating window
+super + {Left,Down,Up,Right}
+	bspc node -v {-20 0,0 20,0 -20,20 0}

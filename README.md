@@ -99,7 +99,7 @@ sudo vim /etc/X11/xorg.conf.d/20-nvidia.conf
 See repo file for what to add
 Reboot.
 
-### Step 11: Install rofi, rofi themes, nvim (and vim-plug), picom-ibhagwan-git, pywal (and therefore pip), imagemagick, feh, pulseaudio, firefox, spotify, nerd fonts, dolphin, polybar, starship, pipes.sh, tty-clock-git, htop, gotop, neofetch, and fet.sh
+### Step 11: Install rofi, rofi themes, nvim (and vim-plug), picom-ibhagwan-git, pywal (and therefore pip), imagemagick, feh, pulseaudio, firefox, spotify, nerd fonts, dolphin, polybar, starship, tdrop, pipes.sh, tty-clock-git, htop, gotop, neofetch, and fet.sh
 
 See the repo for their configuration files.
 

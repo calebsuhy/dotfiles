@@ -4,7 +4,7 @@
 pgrep -x sxhkd > /dev/null || sxhkd &
 
 # Start polybar
-$HOME/.config/polybar/launch.sh
+$HOME/.config/polybar/launch.sh &
 
 # Start picom
 picom --config ~/.config/picom/picom.conf &
@@ -15,14 +15,37 @@ feh --bg-scale ~/Pictures/wallpaper.jpg
 # Set key repeat rate and delay
 xset r rate 175 60
 
+# Set the cursor (gets rid of the "x" cursor)
+xsetroot -cursor_name left_ptr &
+
+# Names of workspaces (for use in polybar)
 bspc monitor -d terminals firefox spotify files extra
+
+# Set the border width for windows
 bspc config border_width          2
+
+# Self explanatory
 bspc config focused_border_color  "#E0FFFF"
+
+# Self explanatory
 bspc config window_gap            25
+
+# When using manual tiling, this sets the color of the preview window
 bspc config presel_feedback_color "#E0FFFF"
 
+# Ratio of how to split the node that you are adding a new window to
 bspc config split_ratio           0.5
-bspc config borderless_monocle    true
-bspc config gapless_monocle       true
+
+# When only one window is used, the monocle layout is used.
+# The monocle layout puts all windows in the node in fullscreen, one behind the
+# other
 bspc config single_monocle        true
+
+# No border for windows in the monocle layout
+bspc config borderless_monocle    true
+
+# No gaps for windows in the monocle layout
+bspc config gapless_monocle       true
+
+# The window underneath the cursor becomes the foucsed cursor
 bspc config focus_follows_pointer true

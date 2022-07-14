@@ -25,6 +25,7 @@ set background=dark
 set number relativenumber " enables hybrid line numbers (mix of relative + absolute)
 set nowrap " turns off line wrapping
 set ruler " displays the line and column number in bottom right
+set colorcolumn=81 " creats a column at column 81
 
 " onedark
 " colorscheme onedark

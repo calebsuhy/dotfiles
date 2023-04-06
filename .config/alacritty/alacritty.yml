@@ -46,3 +46,4 @@ colors:
     - { index: 17, color: '#bfc9db' }
 
 live_config_reload: true
+

@@ -5,17 +5,17 @@ call plug#begin()
 Plug 'scrooloose/nerdcommenter' " quickly comment out lines of code with <leader><cc> or <leader><cs> (use <leader><cu> to undo)
 Plug 'neoclide/coc.nvim', {'branch': 'release'} " coc autocomplete engine
 Plug 'jiangmiao/auto-pairs' " autocompletes () {} and []
-Plug 'easymotion/vim-easymotion' " easy motion navigation
+Plug 'phaazon/hop.nvim' " better easymotion
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } " see below
 Plug 'junegunn/fzf.vim' " enables fzf search within vim with <CTRL-p>
 Plug 'preservim/nerdtree' " file tree access with <CTRL-n>
 Plug 'mattn/emmet-vim' " emmet.vim for web dev stuff
-Plug 'joshdick/onedark.vim' " onedark colorscheme
-Plug 'Luxed/ayu-vim' " ayu theme
 Plug 'tiagovla/tokyodark.nvim' " tokyodark theme
 Plug 'itchyny/lightline.vim' " lightline
 
 call plug#end()
+
+lua require('hop').setup()
 
 " --- Commands ---
 
@@ -25,15 +25,15 @@ set background=dark
 set number relativenumber " enables hybrid line numbers (mix of relative + absolute)
 set nowrap " turns off line wrapping
 set ruler " displays the line and column number in bottom right
-set colorcolumn=81 " creats a column at column 81
+set colorcolumn=75 " creats a column at column 81
 
 " onedark
-" colorscheme onedark
+"colorscheme onedark
 
 " ayu
-" let g:ayucolor="mirage"
-" let g:ayucolor="dark"
-" colorscheme ayu
+"let g:ayucolor="mirage"
+"let g:ayucolor="dark"
+"colorscheme ayu
 
 " tokyodark
 let g:tokyodark_transparent_background = 0
@@ -69,12 +69,8 @@ set smartcase " ignores case until I enter uppercase letter
 set autoindent " vim does its best to indent for me
 filetype plugin indent on " enables smart indenting based on the type of file
 
-" plugin settings
-let g:ycm_show_diagnostics_ui=0 " turns off YCM linter
-set completeopt-=preview " turns off the YCM preview window
-
-" remap easymotion settings -> default is <leader><leader><motion>, this makes it <leader><motion>
-map <leader> <Plug>(easymotion-prefix)
+" hop.nvim keybindings
+nnoremap <leader>f :HopWord<CR>
 
 " enable normal backspacking
 set backspace=indent,eol,start

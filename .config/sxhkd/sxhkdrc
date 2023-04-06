@@ -22,6 +22,10 @@ super + Escape
 super + shift + r
     bspc wm -r
 
+# Lock screen
+super + m
+    slock
+
 # Close window
 super + shift + q
     bspc node -c

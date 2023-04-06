@@ -10,16 +10,19 @@ $HOME/.config/polybar/launch.sh &
 picom --config ~/.config/picom/picom.conf &
 
 # Set background
-feh --bg-scale ~/Pictures/wallpaper.jpg
+feh --bg-scale ~/Pictures/wallpaper.jpg &
 
 # Set key repeat rate and delay
-xset r rate 175 60
+xset r rate 175 60 &
 
 # Set the cursor (gets rid of the "x" cursor)
 xsetroot -cursor_name left_ptr &
 
+# Set the autolocker 
+xautolock -time 10 -locker slock &
+
 # Names of workspaces (for use in polybar)
-bspc monitor -d terminals firefox spotify files extra
+bspc monitor -d terminals firefox spotify discord files
 
 # Set the border width for windows
 bspc config border_width          2
@@ -49,3 +52,4 @@ bspc config gapless_monocle       true
 
 # The window underneath the cursor becomes the foucsed cursor
 bspc config focus_follows_pointer true
+

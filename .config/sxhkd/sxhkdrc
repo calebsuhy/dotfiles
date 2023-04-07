@@ -6,7 +6,7 @@ super + Return
 
 # Application Launcher
 super + @space
-    sh ~/.config/rofi/launchers/colorful/launcher.sh
+    sh ~/.config/rofi/launchers/type-6/launcher.sh
 
 # Tdrop scratchpad
 super + s

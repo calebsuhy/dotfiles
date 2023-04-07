@@ -88,7 +88,8 @@ Create /etc/X11/xorg.conf.d/10-keyboard.conf
 ```
 vim /etc/X11/xorg.conf.d/10-keyboard.conf
 ```
-See the repo file for what to add
+See the repo file for what to add.
+Blacklist nouveau driver by adding the blacklist nouveau file.
 ```
 sudo pacman -S nvidia
 ```

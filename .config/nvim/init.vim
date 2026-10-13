@@ -40,6 +40,12 @@ let g:tokyodark_transparent_background = 0
 let g:tokyodark_enable_italic_comment = 1
 let g:tokyodark_enable_italic = 1
 let g:tokyodark_color_gamma = "1.0"
+" Configure the theme options using Lua
+lua << EOF
+require('tokyodark').setup({
+    transparent_background = true, -- Enable transparent background
+})
+EOF
 colorscheme tokyodark
 
 " status line

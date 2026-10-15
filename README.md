@@ -37,7 +37,9 @@ The folders mirror where the files live on the computer:
 | `.config/dunst/dunstrc` | Notification popups |
 | `.config/alacritty/alacritty.toml` | Terminal |
 | `.config/qt6ct/`, `.config/kdeglobals`, `.local/share/color-schemes/Casu.colors` | Dark Casu colours for Qt/KDE apps (Dolphin, Flameshot settings) |
-| `.config/gtk-3.0/`, `.config/gtk-4.0/` | Dark theme, Papirus icons, Bibata cursor for GTK apps |
+| `.config/gtk-3.0/`, `.config/gtk-4.0/` | Dark theme, Papirus icons, Bibata cursor and Iosevka 11 for GTK apps |
+| `.config/fontconfig/fonts.conf` | Makes Iosevka the default font for every app that doesn't pick its own (Firefox is left out so web pages look normal) |
+| `.local/share/fonts/` | Hand-installed fonts: Iosevka Nerd Font (lock screen song line), JetBrains Mono Nerd Font, Grape Nuts, feather icons |
 | `.config/wireplumber/wireplumber.conf.d/51-yeti-soft-volume.conf` | Smooth volume for the Blue Yeti (see audio note below) |
 | `.config/spicetify/` | Spotify theme "Casu" + `spotify-themed.sh` wrapper |
 | `.local/share/applications/spotify-launcher.desktop` | Makes the Spotify menu entry start the themed version |
@@ -169,6 +171,12 @@ Needed for the login screen (ly) and the fan-sensor driver. At the ly login scre
   ```sh
   amixer -c 0 sset Speaker 100%   # check the card number with: aplay -l
   sudo alsactl store
+  ```
+- **Fonts:** run `fc-cache -f` so the hand-installed fonts are picked up, then set the GTK interface font (it's stored in a settings database, not a file):
+  ```sh
+  gsettings set org.gnome.desktop.interface font-name 'Iosevka 11'
+  gsettings set org.gnome.desktop.interface document-font-name 'Iosevka 11'
+  gsettings set org.gnome.desktop.interface monospace-font-name 'Iosevka 11'
   ```
 - **Claude Code:** sign in with `claude`, then reinstall the claude-hud status line plugin (`/plugin`).
 - Restart pieces after edits: `pkill dunst` (it restarts itself on the next notification), Super+Shift+R for the bar.

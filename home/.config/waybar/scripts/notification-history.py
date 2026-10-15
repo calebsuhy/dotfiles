@@ -2,8 +2,8 @@
 """Show recent dunst notifications in rofi (newest first, with app icons).
 A left-click opens one: it does what clicking its popup does (e.g. Discord
 switches to that chat), takes you to that app's window, marks it read and
-closes the list. Delete marks one as read, which removes it from the history
-while the list stays open. Enter (or "Clear all" at the bottom) clears them
+closes the list. Delete or a middle-click marks one as read, which removes
+it from the history without opening it, while the list stays open. Enter (or "Clear all" at the bottom) clears them
 all; Esc (or "Close") closes. The bell counts what's left.
 
 Run without arguments (the bell's left-click) it opens rofi, which then runs
@@ -206,7 +206,7 @@ def open_notification(nid):
                        capture_output=True)
 
 
-# ROFI_RETV: a click on a row, Delete (-kb-custom-1), Enter (-kb-custom-2)
+# ROFI_RETV: a click on a row, Delete or middle-click (-kb-custom-1), Enter (-kb-custom-2)
 CLICK, DELETE, CLEAR_ALL = 1, 10, 11
 
 def close_open_menus():
@@ -231,8 +231,12 @@ if "ROFI_RETV" not in os.environ:
     os.execvp("rofi", [
         "rofi", "-show", "notifications", "-modi", f"notifications:{__file__}",
         "-show-icons", "-i",
-        # Delete normally deletes text in the search box; keep Ctrl+D for that
-        "-kb-remove-char-forward", "Control+d", "-kb-custom-1", "Delete",
+        # Delete normally deletes text in the search box; keep Ctrl+D for that.
+        # A middle-click does the same as Delete. rofi only passes keys and
+        # clicks on to us for the highlighted row, so the highlight follows
+        # the mouse (hover-select) to make that the row under the pointer.
+        "-kb-remove-char-forward", "Control+d", "-kb-custom-1", "Delete,MouseMiddle",
+        "-hover-select",
         # Enter clears all (kb-custom-2) instead of picking the highlighted row
         "-kb-accept-entry", "Control+j", "-kb-custom-2", "Return,KP_Enter",
         # one left-click on a row opens it (normally it only highlights)

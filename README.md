@@ -102,7 +102,7 @@ Caps Lock acts as Escape. Key repeat: 175 ms delay, 60 per second.
 ### Menus (all rofi, same look; click outside to close)
 
 - **Launcher** (Super+Space): apps, with a styled error popup if something fails to start.
-- **Notifications** (click the bell): click a notification to re-open it and jump to its app; Delete marks one read; Enter / "Clear all" clears everything. Middle-click the bell clears history, right-click toggles do-not-disturb.
+- **Notifications** (click the bell): click a notification to re-open it and jump to its app; Delete or a middle-click marks one read without opening it (the highlight follows the mouse); Enter / "Clear all" clears everything. Middle-click the bell clears history, right-click toggles do-not-disturb.
 - **Updates** (click the updates count): lists pending updates; "Upgrade all" opens a floating terminal that runs `yay -Syu` with a summary at the end (and a restart hint if the kernel changed). Test without installing anything: `sh ~/.config/waybar/scripts/system-upgrade.sh --demo`.
 - **Wi-Fi** (click the network name): networks sorted by signal, connect, enter a password for new secured networks, disconnect, turn Wi-Fi on/off.
 - **Power**: Close all windows / Lock / Log out / Reboot / Shut down (all but Lock ask to confirm).

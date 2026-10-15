@@ -18,6 +18,7 @@ firefox
 flameshot
 fzf
 git
+github-cli
 gnome-keyring
 go
 grim

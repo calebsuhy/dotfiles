@@ -138,6 +138,9 @@ hl.config({
         force_default_wallpaper  = 0,
         disable_hyprland_logo    = true,
         disable_splash_rendering = true,
+        -- An app may bring its window to the front when asked to (e.g.
+        -- clicking a Claude Desktop or Discord notification takes you there)
+        focus_on_activate        = true,
     },
 
     -- No donation or "what's new" popups after updates

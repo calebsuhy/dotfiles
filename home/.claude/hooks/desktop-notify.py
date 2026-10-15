@@ -7,6 +7,9 @@ this session runs in (its terminal, or Claude Desktop) is not focused.
                                  Claude's last reply (normal urgency)
     desktop-notify.py attention  Notification hook: permission prompts and
                                  questions (critical, stays until dismissed)
+
+Clicking the notification brings back the window the session runs in: the
+Claude scratchpad slides in, a terminal on another workspace gets focused.
 """
 import html
 import json
@@ -29,20 +32,45 @@ def parent(pid):
         return int(stat.read().rsplit(")", 1)[1].split()[1])
 
 
+def hyprctl_json(*args):
+    try:
+        return json.loads(output("hyprctl", *args, "-j") or "null")
+    except ValueError:
+        return None
+
+
+def ancestors():
+    pid = os.getppid()
+    while pid > 1:
+        yield pid
+        pid = parent(pid)
+
+
 def session_focused():
     """Whether the window this session runs in is the focused one: the
     focused window's process (from Hyprland) must be one of this hook's
     ancestors, i.e. the terminal or Claude Desktop this session runs in."""
-    try:
-        active = json.loads(output("hyprctl", "activewindow", "-j") or "{}").get("pid")
-    except ValueError:
-        return False
-    pid = os.getppid()
-    while pid > 1:
-        if pid == active:
-            return True
-        pid = parent(pid)
-    return False
+    active = (hyprctl_json("activewindow") or {}).get("pid")
+    return active in ancestors()
+
+
+def session_window():
+    """Address of the window this session runs in (the nearest ancestor
+    process that has a window), or None."""
+    windows = {c["pid"]: c["address"] for c in hyprctl_json("clients") or []}
+    for pid in ancestors():
+        if pid in windows:
+            return windows[pid]
+    return None
+
+
+def notify_and_wait(address, notify_args):
+    """Background part: show the notification, wait for it to be clicked or
+    closed, and on a click focus the session's window (Hyprland also opens
+    the scratchpad it's on)."""
+    clicked = output("notify-send", "-A", "default=Open", "--wait", *notify_args)
+    if clicked == "default" and address:
+        output("hyprctl", "dispatch", f'hl.dsp.focus({{ window = "address:{address}" }})')
 
 
 def final_text(path):
@@ -93,8 +121,12 @@ def last_reply(event):
     return text
 
 
-event = json.load(sys.stdin)
 kind = sys.argv[1] if len(sys.argv) > 1 else "stop"
+if kind == "wait":  # started by the code at the bottom, see there
+    notify_and_wait(sys.argv[2], sys.argv[3:])
+    sys.exit(0)
+
+event = json.load(sys.stdin)
 
 # The "waiting for your input" reminder follows every finished response after
 # a minute idle; the Stop notification already covered that.
@@ -113,6 +145,11 @@ else:
     body = last_reply(event) or "Done"
     urgency = "normal"
 
-subprocess.run(["notify-send", "-a", "Claude Code", "-i", "claude-desktop",
-                "-u", urgency, html.escape(summary, quote=False),
-                html.escape(body, quote=False)])
+# Waiting for the click happens in a separate background process, so Claude
+# carries on right away; it ends when the notification is clicked or closed.
+notify_args = ["-a", "Claude Code", "-i", "claude-desktop", "-u", urgency,
+               html.escape(summary, quote=False), html.escape(body, quote=False)]
+subprocess.Popen([sys.executable, os.path.abspath(__file__), "wait",
+                  session_window() or ""] + notify_args,
+                 stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL,
+                 stderr=subprocess.DEVNULL, start_new_session=True)

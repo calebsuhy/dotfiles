@@ -182,7 +182,14 @@ def open_notification(nid):
     app = field(n, "appname").lower()
     clients = json.loads(subprocess.run(["hyprctl", "clients", "-j"],
                                         capture_output=True, text=True).stdout or "[]")
-    window = next((c for c in clients if app and app in c["class"].lower()), None)
+    # best match first: the exact name ("vesktop"), then one ending in it
+    # ("com.anthropic.Claude" for "Claude"), then one merely containing it,
+    # so Claude Desktop's notifications don't open the Claude scratchpad
+    def match(c):
+        name = c["class"].lower()
+        return 0 if name == app else 1 if name.endswith("." + app) else 2
+    window = min((c for c in clients if app and app in c["class"].lower()),
+                 key=match, default=None)
     # Claude Code notifications name their session's window (the Claude
     # scratchpad or a terminal) in a note left by ~/.claude/hooks/desktop-notify.py
     note = os.path.join(os.environ.get("XDG_RUNTIME_DIR", "/tmp"), "claude-notify", nid)

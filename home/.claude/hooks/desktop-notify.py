@@ -10,6 +10,9 @@ this session runs in (its terminal, or Claude Desktop) is not focused.
 
 Clicking the notification brings back the window the session runs in: the
 Claude scratchpad slides in, a terminal on another workspace gets focused.
+It also works from the bell's list once the popup has timed out: each
+notification's window is written to WINDOWS_DIR/<notification id>, which
+~/.config/waybar/scripts/notification-history.py reads.
 """
 import html
 import json
@@ -20,6 +23,8 @@ import sys
 import time
 
 PREVIEW_LENGTH = 140
+# cleared at logout, like the windows it points to
+WINDOWS_DIR = os.path.join(os.environ.get("XDG_RUNTIME_DIR", "/tmp"), "claude-notify")
 
 
 def output(*cmd):
@@ -67,8 +72,17 @@ def session_window():
 def notify_and_wait(address, notify_args):
     """Background part: show the notification, wait for it to be clicked or
     closed, and on a click focus the session's window (Hyprland also opens
-    the scratchpad it's on)."""
-    clicked = output("notify-send", "-A", "default=Open", "--wait", *notify_args)
+    the scratchpad it's on). notify-send -p prints the notification's id
+    first, which is noted for the bell's list."""
+    proc = subprocess.Popen(["notify-send", "-p", "-A", "default=Open", "--wait",
+                             *notify_args], stdout=subprocess.PIPE, text=True)
+    nid = proc.stdout.readline().strip()
+    if nid.isdigit() and address:
+        os.makedirs(WINDOWS_DIR, exist_ok=True)
+        with open(os.path.join(WINDOWS_DIR, nid), "w") as note:
+            note.write(address)
+    clicked = proc.stdout.read().strip()
+    proc.wait()
     if clicked == "default" and address:
         output("hyprctl", "dispatch", f'hl.dsp.focus({{ window = "address:{address}" }})')
 

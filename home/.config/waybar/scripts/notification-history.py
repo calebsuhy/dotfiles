@@ -178,11 +178,21 @@ def open_notification(nid):
     time.sleep(0.05)
     dunstctl("history-rm", nid)
     # the app's own window (e.g. "vesktop"), wherever it is; apps can't
-    # bring themselves forward under Hyprland, so do it for them
+    # always bring themselves forward, so do it for them
     app = field(n, "appname").lower()
     clients = json.loads(subprocess.run(["hyprctl", "clients", "-j"],
                                         capture_output=True, text=True).stdout or "[]")
     window = next((c for c in clients if app and app in c["class"].lower()), None)
+    # Claude Code notifications name their session's window (the Claude
+    # scratchpad or a terminal) in a note left by ~/.claude/hooks/desktop-notify.py
+    note = os.path.join(os.environ.get("XDG_RUNTIME_DIR", "/tmp"), "claude-notify", nid)
+    try:
+        with open(note) as f:
+            address = f.read().strip()
+        os.remove(note)
+        window = next((c for c in clients if c["address"] == address), None)
+    except OSError:
+        pass
     if window:
         subprocess.run(["hyprctl", "dispatch",
                         f'hl.dsp.focus({{ window = "address:{window["address"]}" }})'],

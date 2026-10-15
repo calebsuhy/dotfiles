@@ -111,7 +111,7 @@ Caps Lock acts as Escape. Key repeat: 175 ms delay, 60 per second.
 ### Other touches
 
 - Notifications (dunst) appear bottom-right; left-click = open, middle = dismiss, right = dismiss all.
-- Claude Code pops up a desktop notification when it finishes or needs you, but **only when its window isn't focused** (`.claude/hooks/desktop-notify.py`). Clicking the notification takes you back to that session (the Claude scratchpad slides in, or its terminal gets focused).
+- Claude Code pops up a desktop notification when it finishes or needs you, but **only when its window isn't focused** (`.claude/hooks/desktop-notify.py`). Clicking the notification, or its entry in the bell list after it has timed out, takes you back to that session (the Claude scratchpad slides in, or its terminal gets focused).
 - Clicking an app's notification (Claude Desktop, Discord, ...) can bring that app's window to the front (`focus_on_activate` in `hyprland.lua`).
 - Spotify, Discord (Vesktop), Dolphin and other Qt/KDE apps, the lock screen and the login screen all use the same Casu colours.
 

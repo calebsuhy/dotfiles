@@ -38,7 +38,7 @@ The folders mirror where the files live on the computer:
 | `.config/alacritty/alacritty.toml` | Terminal |
 | `.config/qt6ct/`, `.config/kdeglobals`, `.local/share/color-schemes/Casu.colors` | Dark Casu colours for Qt/KDE apps (Dolphin, Flameshot settings) |
 | `.config/gtk-3.0/`, `.config/gtk-4.0/` | Dark theme, Papirus icons, Bibata cursor and Iosevka 11 for GTK apps |
-| `.config/fontconfig/fonts.conf` | Makes Iosevka the default font for every app that doesn't pick its own (Firefox is left out so web pages look normal) |
+| `.config/fontconfig/fonts.conf` | Makes Iosevka the default font for every app that doesn't pick its own (including Firefox and websites that don't bring their own font) |
 | `.local/share/fonts/` | Hand-installed fonts: Iosevka Nerd Font (lock screen song line), JetBrains Mono Nerd Font, Grape Nuts, feather icons |
 | `.config/wireplumber/wireplumber.conf.d/51-yeti-soft-volume.conf` | Smooth volume for the Blue Yeti (see audio note below) |
 | `.config/spicetify/` | Spotify theme "Casu" + `spotify-themed.sh` wrapper |

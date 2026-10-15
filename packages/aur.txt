@@ -1,0 +1,13 @@
+bibata-cursor-theme-bin
+claude-code
+claude-desktop
+fet.sh-git
+gotop
+neofetch
+pipes.sh
+python-pywal
+spicetify-cli
+tty-clock-git
+vesktop-bin
+yay
+zotero

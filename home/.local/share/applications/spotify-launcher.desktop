@@ -1,0 +1,14 @@
+[Desktop Entry]
+# Same as the system entry, but starts Spotify through
+# ~/.config/spicetify/spotify-themed.sh, which re-applies the theme after
+# Spotify updates itself
+Type=Application
+Name=Spotify (Launcher)
+GenericName=Music Player
+Icon=spotify-launcher
+TryExec=spotify-launcher
+Exec=/home/casu/.config/spicetify/spotify-themed.sh %U
+Terminal=false
+MimeType=x-scheme-handler/spotify;
+Categories=Audio;Music;Player;AudioVideo;
+StartupWMClass=spotify

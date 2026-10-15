@@ -1,0 +1,7 @@
+[Added Associations]
+application/pdf=zathura-3.desktop;zathura-2.desktop;zathura.desktop;
+
+[Default Applications]
+application/pdf=zathura-3.desktop;
+x-scheme-handler/claude-cli=claude-code-url-handler.desktop
+x-scheme-handler/discord=vesktop.desktop

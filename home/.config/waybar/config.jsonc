@@ -1,0 +1,261 @@
+// Waybar: the counterpart of ~/.config/waybar/scripts/config.ini. Same modules,
+// same order, same scripts (all in ~/.config/waybar/scripts).
+// Look and colours are in style.css. Restart: Super+Shift+R.
+// Icons are drawn bigger than the text (27px, like polybar's icon font) and
+// lowered 3px (rise='-3072') so their middle lines up with the text's;
+// scripts that print their own icon go through big-icon.sh for the same.
+// Every module has "tooltip": false: no hover popups (polybar had none).
+{
+    "layer": "top",
+    "position": "bottom",
+    "height": 50,
+
+    // workspaces | Claude sessions, CPU, GPU, fans, memory, updates
+    // (updates hides itself when there are none, so it ends the stats group
+    // rather than leaving a lone divider)
+    "modules-left": ["custom/ws#1", "custom/ws#2", "custom/ws#3", "custom/ws#4", "custom/ws#5",
+                     "custom/sep-workspaces", "custom/claude",
+                     "custom/cpu", "custom/gpu", "custom/fans", "memory", "custom/updates"],
+    "modules-center": ["custom/media", "custom/media-prev", "custom/media-play", "custom/media-next"],
+    // network | notification bell + tray icons of running apps | volume, clock + power
+    "modules-right": ["network#netspeed", "group/wifi", "custom/sep#1",
+                      "custom/notifications", "tray", "custom/sep#2",
+                      "pulseaudio#icon", "custom/volume-level", "group/clock", "custom/powermenu"],
+
+    // temperature + usage, e.g. "38°C 4%"
+    "custom/cpu": {
+        "tooltip": false,
+        "exec": "~/.config/waybar/scripts/cpu.sh",
+        "format": "<span font='FiraCode Nerd Font Mono 27px' rise='-3072'></span> {}"
+    },
+
+    // temperature + usage, e.g. "32°C 1%"
+    "custom/gpu": {
+        "tooltip": false,
+        "exec": "~/.config/waybar/scripts/gpu.sh",
+        "format": "<span font='FiraCode Nerd Font Mono 27px' rise='-3072'>󰢮</span> {}"
+    },
+
+    // CPU fan · GPU fan in RPM, e.g. "1150 · 0" (GPU = average of its two fans)
+    "custom/fans": {
+        "tooltip": false,
+        "exec": "~/.config/waybar/scripts/fans.sh",
+        "format": "<span font='FiraCode Nerd Font Mono 27px' rise='-3072'>󰈐</span> {}"
+    },
+
+    "custom/sep#1": { "format": "│", "tooltip": false },
+    "custom/sep#2": { "format": "│", "tooltip": false },
+
+    // the divider after the workspaces
+    "custom/sep-workspaces": { "format": "│", "tooltip": false },
+
+    // Wi-Fi icon; click it and the network name slides out next to it (and
+    // back in on the next click) over 0.25s, like the window animations.
+    // Click the name for the Wi-Fi menu (wifi-menu.sh)
+    "group/wifi": {
+        "orientation": "horizontal",
+        "drawer": {
+            "transition-duration": 250,
+            "transition-left-to-right": true,
+            "click-to-reveal": true
+        },
+        "modules": ["custom/wifi-icon", "custom/wifi-name"]
+    },
+    "custom/wifi-icon": {
+        "tooltip": false,
+        "exec": "~/.config/waybar/scripts/wifi.sh icon | ~/.config/waybar/scripts/big-icon.sh"
+    },
+    // escape: a "&" or "<" in a network name can't break the bar's text
+    "custom/wifi-name": {
+        "tooltip": false,
+        "escape": true,
+        "exec": "~/.config/waybar/scripts/wifi.sh name",
+        "on-click": "~/.config/waybar/scripts/wifi-menu.sh"
+    },
+
+    // clock; click it and the date slides out after the time (and back in on
+    // the next click) over 0.25s
+    "group/clock": {
+        "orientation": "horizontal",
+        "drawer": {
+            "transition-duration": 250,
+            "transition-left-to-right": true,
+            "click-to-reveal": true
+        },
+        "modules": ["clock", "clock#date"]
+    },
+    "clock": {
+        "interval": 1,
+        "format": "<span font='FiraCode Nerd Font Mono 27px' rise='-3072'>󰃰</span> {:%I:%M %p}",
+        "tooltip": false
+    },
+    // the date, after a faint dot like the menus' footers
+    "clock#date": {
+        "interval": 60,
+        "format": "<span alpha='35%'>·</span> {:%A, %B %d, %Y}",
+        "tooltip": false
+    },
+
+    // volume, in two parts: the speaker icon and the "50%" next to it. On
+    // either one, scroll to change it (capped at 100%), click to mute. When
+    // muted the icon is crossed out and the % shrinks into it (style.css)
+    "pulseaudio#icon": {
+        "format": "<span font='FiraCode Nerd Font Mono 27px' rise='-3072'></span>",
+        "format-muted": "<span font='FiraCode Nerd Font Mono 27px' rise='-3072'>󰖁</span>",
+        "max-volume": 100,
+        "scroll-step": 5,
+        "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
+        "tooltip": false
+    },
+    // the "50%", from a script that also tells style.css how many
+    // characters it takes and whether it's muted (so it can slide exactly its
+    // own width into the icon); scroll steps 5%, capped at 100% like the icon
+    "custom/volume-level": {
+        "tooltip": false,
+        "return-type": "json",
+        "exec": "~/.config/waybar/scripts/volume-level.sh",
+        "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
+        "on-scroll-up": "wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+",
+        "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"
+    },
+
+    // power button: click for a panel with lock / log out / reboot / shut
+    // down (reboot and shut down ask to confirm), styled like the other menus
+    "custom/powermenu": {
+        "format": "<span font='FiraCode Nerd Font Mono 27px' rise='-3072'></span>",
+        "tooltip": false,
+        "on-click": "~/.config/waybar/scripts/power-menu.sh"
+    },
+
+    // now playing (Spotify first, else any other player): icon, "Artist –
+    // Title" (capped at 70 characters, ends in …) and the time into the song;
+    // dimmed with a pause icon while paused (style.css). Click the song to
+    // jump to the Spotify workspace. All four parts come from media.py
+    "custom/media": {
+        "tooltip": false,
+        "return-type": "json",
+        "exec": "~/.config/waybar/scripts/media.py info",
+        "on-click": "~/.config/waybar/scripts/media.py show"
+    },
+    // previous / play-pause / next buttons after the song
+    "custom/media-prev": {
+        "tooltip": false,
+        "return-type": "json",
+        "exec": "~/.config/waybar/scripts/media.py button-prev",
+        "on-click": "~/.config/waybar/scripts/media.py previous"
+    },
+    "custom/media-play": {
+        "tooltip": false,
+        "return-type": "json",
+        "exec": "~/.config/waybar/scripts/media.py button-play",
+        "on-click": "~/.config/waybar/scripts/media.py play-pause"
+    },
+    "custom/media-next": {
+        "tooltip": false,
+        "return-type": "json",
+        "exec": "~/.config/waybar/scripts/media.py button-next",
+        "on-click": "~/.config/waybar/scripts/media.py next"
+    },
+
+    // amount used + percentage, e.g. "5.50 GiB 18%"
+    "memory": {
+        "interval": 2,
+        "format": "<span font='FiraCode Nerd Font Mono 27px' rise='-3072'></span> {used:0.2f} GiB {percentage}%",
+        "tooltip": false
+    },
+
+    // live download / upload rates on the wifi connection, behind one icon
+    // (hidden when offline)
+    "network#netspeed": {
+        "interface": "wlan0",
+        "interval": 1,
+        "format": "<span font='FiraCode Nerd Font Mono 27px' rise='-3072'>󰓅</span> ↓{bandwidthDownBytes} ↑{bandwidthUpBytes}",
+        "format-disconnected": "",
+        "tooltip": false
+    },
+
+    // bell for dunst: left-click lists recent notifications, middle-click clears
+    // that history, right-click toggles do-not-disturb (crossed-out bell + count
+    // of notifications held back)
+    "custom/notifications": {
+        "tooltip": false,
+        "exec": "~/.config/waybar/scripts/notifications.sh | ~/.config/waybar/scripts/big-icon.sh",
+        "on-click": "~/.config/waybar/scripts/notification-history.py",
+        "on-click-middle": "dunstctl history-clear",
+        "on-click-right": "~/.config/waybar/scripts/notifications.sh toggle"
+    },
+
+    // pending updates (repos + AUR), checked every 10 minutes; click for a rofi
+    // list of them with an "Upgrade all" entry (updates-menu.sh)
+    "custom/updates": {
+        "tooltip": false,
+        "exec": "~/.config/waybar/scripts/updates.sh | ~/.config/waybar/scripts/big-icon.sh",
+        "on-click": "~/.config/waybar/scripts/updates-menu.sh"
+    },
+
+    // Icons for apps that live in the tray (Claude Desktop, Discord, Spotify);
+    // right-click one for its menu, e.g. to fully quit Claude Desktop.
+    "tray": {
+        "tooltip": false,
+        "icon-size": 25,
+        "spacing": 12
+    },
+
+    // number of Claude Code sessions running
+    "custom/claude": {
+        "tooltip": false,
+        "exec": "~/.config/waybar/scripts/claude-count.sh",
+        "interval": 2,
+        "format": "<span font='FiraCode Nerd Font Mono 27px' rise='-3072'></span> {}"
+    },
+
+    // one button per workspace (terminals, claude, firefox, spotify, discord); click to switch, scroll to move
+    // between them; the active one gets a red underline (style.css).
+    // workspace.py keeps each button's state up to date. (Waybar's own
+    // hyprland/workspaces module can't switch on click with Hyprland 0.56.)
+    "custom/ws#1": {
+        "exec": "~/.config/waybar/scripts/workspace.py 1",
+        "return-type": "json",
+        "format": "<span font='FiraCode Nerd Font Mono 27px' rise='-3072'></span>",
+        "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = 1 })'",
+        "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })'",
+        "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })'",
+        "tooltip": false
+    },
+    "custom/ws#2": {
+        "exec": "~/.config/waybar/scripts/workspace.py 2",
+        "return-type": "json",
+        "format": "<span font='FiraCode Nerd Font Mono 27px' rise='-3072'></span>",
+        "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = 2 })'",
+        "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })'",
+        "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })'",
+        "tooltip": false
+    },
+    "custom/ws#3": {
+        "exec": "~/.config/waybar/scripts/workspace.py 3",
+        "return-type": "json",
+        "format": "<span font='FiraCode Nerd Font Mono 27px' rise='-3072'></span>",
+        "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = 3 })'",
+        "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })'",
+        "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })'",
+        "tooltip": false
+    },
+    "custom/ws#4": {
+        "exec": "~/.config/waybar/scripts/workspace.py 4",
+        "return-type": "json",
+        "format": "<span font='FiraCode Nerd Font Mono 27px' rise='-3072'></span>",
+        "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = 4 })'",
+        "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })'",
+        "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })'",
+        "tooltip": false
+    },
+    "custom/ws#5": {
+        "exec": "~/.config/waybar/scripts/workspace.py 5",
+        "return-type": "json",
+        "format": "<span font='FiraCode Nerd Font Mono 27px' rise='-3072'>󰙯</span>",
+        "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = 5 })'",
+        "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })'",
+        "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })'",
+        "tooltip": false
+    }
+}

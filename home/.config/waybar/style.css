@@ -1,0 +1,130 @@
+/* Waybar look: the counterpart of polybar's [colors] and [bar/main].
+   Sizes are in px to match polybar on this screen: polybar sized its fonts
+   from the monitor's real size (~108 dpi), so Iosevka 10 came out at 15px
+   and the icon font (size 18) at 27px; icons get that size in config.jsonc. */
+
+* {
+    font-family: "Iosevka", "FiraCode Nerd Font Mono";
+    font-size: 15px;
+    border: none;
+    border-radius: 0;
+    min-height: 0;
+    box-shadow: none;
+}
+
+/* background / foreground from polybar's [colors] */
+window#waybar {
+    background: #0F0F17;
+    color: #FFFFFF;
+}
+
+/* module-margin-left/right = 1: one space either side of every module */
+.module {
+    margin: 0 7px;
+}
+
+/* padding-right = 2 (the bar's right edge) */
+.modules-right {
+    margin-right: 15px;
+}
+
+/* faint dividers between groups of modules (colors.separator) */
+#custom-sep-workspaces,
+#custom-sep {
+    color: #3A3A4A;
+}
+
+/* each workspace icon carries 2 units of padding (for the active-workspace
+   highlight), which widens the gap on the divider's left, so pad its right
+   side to match: measured, 14px gives the same gap on both sides */
+#custom-sep-workspaces {
+    margin-right: 14px;
+}
+
+/* an empty tray takes no space (polybar's tray collapsed when empty), so
+   the bell stays centred between its dividers */
+#tray.empty {
+    margin: 0;
+}
+
+/* workspaces: one button per workspace (custom/ws#1-5), icons with 2 units
+   of padding each */
+#custom-ws {
+    margin: 0;
+    padding: 0 15px;
+}
+/* active workspace: red underline instead of a filled red background
+   (polybar line-size = 4, colors.background-alt) */
+#custom-ws.active {
+    box-shadow: inset 0 -4px #C55449;
+}
+/* the underline fades out on the old workspace while it fades in on the new
+   one, in the same 0.25s as window animations, instead of jumping */
+#custom-ws {
+    transition: box-shadow 0.25s ease-out;
+}
+/* modules that change colour (e.g. muted volume) ease into it */
+.module {
+    transition: color 0.25s ease-out, background-color 0.25s ease-out;
+}
+/* what slides out of a drawer (Wi-Fi name, the date) starts one space after
+   the icon or time it belongs to, as if it were part of the same text */
+#custom-wifi-name,
+#clock.date {
+    margin-left: 0;
+}
+/* volume: the "50%" sits one space after the speaker icon; when muted it
+   slides into the (now crossed-out) icon while fading out, and slides back
+   out on unmute, in the same 0.25s as the other animations. It slides by
+   its own width plus the 7px gap after it (one negative margin: 8px per
+   character, "5%" / "50%" / "100%", from the two/three/four classes
+   volume-level.sh adds, + 7). Only this one margin animates: the bar rounds
+   each animated value to whole pixels, and two at once (the old version also
+   closed the right gap) added up to a 2px jump at the end. Sliding beats
+   shrinking, since shrinking text moves in visible 3px jumps.
+   The fade is timed so the number is never seen on top of the icon: on
+   unmute (this rule) it only fades in once it has mostly slid clear, on mute
+   (the .muted rule) it fades out quickly before it reaches the icon.
+   The slide's curve eases out but doesn't slow to a crawl at the end: the
+   bar can only move whole pixels, and with plain ease-out the last pixel
+   arrived after a visible pause (a "snap" at the end) */
+#custom-volume-level {
+    margin-left: 0;
+    transition: margin 0.25s cubic-bezier(0.2, 0.4, 0.5, 0.7),
+                color 0.15s ease-in 0.1s;
+}
+#custom-volume-level.muted.two {
+    margin-left: -23px;
+}
+#custom-volume-level.muted.three {
+    margin-left: -31px;
+}
+#custom-volume-level.muted.four {
+    margin-left: -39px;
+}
+#custom-volume-level.muted {
+    color: transparent;
+    transition: margin 0.25s cubic-bezier(0.2, 0.4, 0.5, 0.7),
+                color 0.15s ease-out;
+}
+/* now playing: paused dims the song (the .module colour transition above
+   fades it over 0.25s); the three buttons sit closer together than modules */
+#custom-media.paused {
+    color: #8A8A99;
+}
+#custom-media-prev,
+#custom-media-play,
+#custom-media-next {
+    margin: 0 4px;
+}
+/* no hover popups anywhere on the bar: modules have "tooltip": false, and
+   tray apps (Claude Desktop, Discord) supply their own hover text, which
+   waybar has no option for, so tooltips are drawn fully transparent */
+tooltip,
+tooltip * {
+    opacity: 0;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    color: transparent;
+}

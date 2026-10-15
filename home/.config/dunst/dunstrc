@@ -1,0 +1,71 @@
+# Notification popups, styled to match the bar (colors from waybar's style.css).
+# Popups stack in the bottom-right corner, just above the bar.
+[global]
+    origin = bottom-right
+    # 24px from the screen edge and the bar, like the gaps between windows
+    # (popups are an overlay that already sits above the bar, so the offset
+    # counts from the bar's top edge)
+    offset = (24, 24)
+    width = 420
+    notification_limit = 5
+    font = Iosevka 11
+    frame_width = 2
+    frame_color = "#E0FFFF"
+    # slightly rounded corners, like windows and menus
+    corner_radius = 6
+    padding = 12
+    horizontal_padding = 14
+    gap_size = 8
+    format = "<b>%s</b>\n%b"
+    icon_position = left
+    max_icon_size = 48
+    icon_theme = "Papirus-Dark"
+    enable_recursive_icon_lookup = true
+    # Left-click: open the app's action (e.g. jump to the Claude session);
+    # middle-click: dismiss; right-click: dismiss all
+    mouse_left_click = do_action, close_current
+    mouse_middle_click = close_current
+    mouse_right_click = close_all
+    # Don't count time away from the keyboard against a popup's timeout
+    idle_threshold = 120
+
+[urgency_low]
+    background = "#0F0F17"
+    foreground = "#AAAAAA"
+    timeout = 5
+
+[urgency_normal]
+    background = "#0F0F17"
+    foreground = "#FFFFFF"
+    timeout = 8
+
+[urgency_critical]
+    background = "#0F0F17"
+    foreground = "#FFFFFF"
+    frame_color = "#FF5555"
+    timeout = 0
+
+# Super+Ctrl+H/J/K/L "next window: above" cues: brief, and kept out of the
+# history so they don't count towards the bell's unread number
+[preselect-cue]
+    appname = preselect
+    history_ignore = yes
+
+# "Locking in 30 seconds" warning before the autolock (hypridle.conf): stays
+# up until you move or the screen locks, and kept out of the history
+[autolock-warning]
+    appname = autolock
+    timeout = 0
+    history_ignore = yes
+
+# Wi-Fi menu (waybar wifi-menu.sh): "Connecting…" / "Connected to …" notices
+# replace each other and are kept out of the history
+[wifi-menu]
+    appname = Wi-Fi
+    history_ignore = yes
+
+# "Close all windows" (power menu, close-all.sh): the "Closed all" notice and
+# the clickable "Still open: …" ones are kept out of the history
+[close-all]
+    appname = "Close all"
+    history_ignore = yes

@@ -1,0 +1,36 @@
+/* Discord (Vesktop) colours, matching the desktop: background #0F0F17,
+   slightly lighter panels, red accent #C55449, light cyan #E0FFFF links.
+   Discord has two sets of colour names (before and after its 2025 redesign),
+   so both are set. Turned on by "useQuickCss" in settings.json. */
+.theme-dark,
+.theme-darker,
+.theme-midnight,
+.visual-refresh.theme-dark,
+.visual-refresh .theme-dark {
+    /* backgrounds, darkest to lightest */
+    --background-base-lowest:      #0a0a10;
+    --background-base-lower:       #0f0f17;
+    --background-base-low:         #13131c;
+    --background-surface-high:     #16161f;
+    --background-surface-higher:   #1e1e2a;
+    --background-surface-highest:  #262632;
+    --background-tertiary:         #0a0a10;
+    --background-secondary:        #0f0f17;
+    --background-secondary-alt:    #13131c;
+    --background-primary:          #13131c;
+    --background-floating:         #0f0f17;
+    --background-nested-floating:  #16161f;
+    --modal-background:            #0f0f17;
+    --chat-background:             #13131c;
+    --channeltextarea-background:  #1e1e2a;
+    --input-background:            #0f0f17;
+
+    /* accent: buttons, unread pills, mentions */
+    --brand-500:                   #c55449;
+    --brand-560:                   #a3463c;
+    --brand-experiment:            #c55449;
+    --brand-experiment-560:        #a3463c;
+    --control-brand-foreground:    #c55449;
+    --text-link:                   #e0ffff;
+    --text-brand:                  #c55449;
+}

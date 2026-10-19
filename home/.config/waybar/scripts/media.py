@@ -2,7 +2,7 @@
 """Waybar "now playing" in the middle of the bar, in four parts (config.jsonc):
 
   media.py info          icon + "Artist – Title  2:50 / 3:03"; while paused
-                         the icon is a pause symbol and style.css dims it all
+                         style.css dims it all (the icon stays the same)
   media.py button-prev   ⏮ button
   media.py button-play   ▶ / ⏸ button (shows what a click will do)
   media.py button-next   ⏭ button
@@ -68,10 +68,7 @@ def info():
     song = f"{artist} – {title}" if artist and title else title or artist
     if len(song) > MAX_LENGTH:
         song = song[:MAX_LENGTH - 1] + "…"
-    if status == "Paused":
-        mark = "pause"
-    else:
-        mark = "spotify" if name == "spotify" else "music"
+    mark = "spotify" if name == "spotify" else "music"
     text = f"{icon(mark)} {html.escape(song, quote=False)}"
     if position:
         elapsed = f"{position} / {length}" if length else position

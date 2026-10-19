@@ -129,7 +129,7 @@
 
     // now playing (Spotify first, else any other player): icon, "Artist –
     // Title" (capped at 70 characters, ends in …) and the time into the song;
-    // dimmed with a pause icon while paused (style.css). Click the song to
+    // dimmed while paused, icon unchanged (style.css). Click the song to
     // jump to the Spotify workspace. All four parts come from media.py
     "custom/media": {
         "tooltip": false,

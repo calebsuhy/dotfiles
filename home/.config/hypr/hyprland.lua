@@ -387,6 +387,15 @@ hl.on("window.open", function(window)
     end
 end)
 
+-- Zathura (PDF viewer) stays solid and full brightness even when it isn't
+-- focused, so a PDF stays easy to read behind a scratchpad
+hl.window_rule({
+    name    = "zathura-solid",
+    match   = { class = "^org.pwmt.zathura$" },
+    opacity = "1.0 override 1.0 override",
+    no_dim  = true,
+})
+
 -- Ignore apps asking to be maximized (they'd cover the gaps and the bar)
 hl.window_rule({
     name  = "suppress-maximize-events",

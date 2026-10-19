@@ -1,0 +1,5 @@
+# Match the bar and Alacritty background (#0F0F17): the area around and
+# between pages, the status bar at the bottom and the ":" command line
+set default-bg   "#0f0f17"
+set statusbar-bg "#0f0f17"
+set inputbar-bg  "#0f0f17"

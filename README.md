@@ -37,6 +37,7 @@ The folders mirror where the files live on the computer:
 | `.config/rofi/` | Only the parts in use: `config.rasi`, `colors/casu.rasi` and `launchers/type-1/` (launcher + the `style-6` theme all menus borrow). Originally from [adi1090x/rofi](https://github.com/adi1090x/rofi) |
 | `.config/dunst/dunstrc` | Notification popups |
 | `.config/alacritty/alacritty.toml` | Terminal |
+| `.config/zathura/zathurarc` | PDF viewer: background, status bar and command line in the bar colour |
 | `.config/qt6ct/`, `.config/kdeglobals`, `.local/share/color-schemes/Casu.colors` | Dark Casu colours for Qt/KDE apps (Dolphin, Flameshot settings) |
 | `.config/gtk-3.0/`, `.config/gtk-4.0/` | Dark theme, Papirus icons, Bibata cursor and Iosevka 11 for GTK apps |
 | `.config/fontconfig/fonts.conf` | Makes Iosevka the default font for every app that doesn't pick its own (Firefox keeps its original fonts: FreeSans for web pages, Adwaita Sans for its menus) |

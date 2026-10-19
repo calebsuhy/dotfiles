@@ -19,6 +19,7 @@ The folders mirror where the files live on the computer:
 | --- | --- | --- |
 | `home/` | your home folder (`~`) | no |
 | `etc/` | `/etc` (system-wide settings) | yes |
+| `boot/` | `/boot` (the GRUB boot menu theme) | yes |
 | `packages/pacman.txt` | list of programs installed from the official Arch repos | – |
 | `packages/aur.txt` | list of programs installed from the AUR (community packages, built with `yay`) | – |
 
@@ -60,6 +61,15 @@ The folders mirror where the files live on the computer:
 | `pacman.conf` | Coloured pacman output, `ILoveCandy`, 5 parallel downloads, verbose package lists |
 | `makepkg.conf` | `!debug` in OPTIONS so AUR builds don't make extra `-debug` packages |
 | `modules-load.d/it87.conf` + `modprobe.d/it87.conf` | Loads the motherboard's fan-sensor driver (it87) so the bar can show CPU fan speed |
+| `default/grub` | GRUB boot menu settings: uses the WinTux theme, 2560×1440, 30-second countdown, starts on the neutral entry, looks for Windows (os-prober), and the `nvidia_drm.modeset=1` boot option |
+| `grub.d/09_wintux_menu` | Lays the boot menu out left to right (Advanced Linux, Linux, neutral, Windows, UEFI settings) so the arrow keys move between the two hands. It switches off the stock `10_linux` and prints its entries itself, in that order |
+| `grub.d/10_linux`, `grub.d/30_uefi-firmware` | The stock GRUB scripts with one small edit each (`--class gnu-linux-adv` / `--class efi`), which tells the theme which picture to show for "Advanced options" and "UEFI settings" |
+
+### Boot menu theme (`boot/`)
+
+| File | What it does |
+| --- | --- |
+| `grub/themes/win-tux-dualboot-fullscreen/` | The WinTux GRUB theme: two wireframe hands, Tux on the left and the Windows logo on the right. The hand for the highlighted entry lights up (one picture per entry in `icons/`); the neutral entry in the middle shows both dimmed |
 
 ---
 
@@ -113,6 +123,7 @@ Caps Lock acts as Escape. Key repeat: 175 ms delay, 60 per second.
 - Notifications (dunst) appear bottom-right; left-click = open, middle = dismiss, right = dismiss all.
 - Claude Code pops up a desktop notification when it finishes or needs you, but **only when its window isn't focused** (`.claude/hooks/desktop-notify.py`). Clicking the notification, or its entry in the bell list after it has timed out, takes you back to that session (the Claude scratchpad slides in, or its terminal gets focused).
 - Clicking an app's notification (Claude Desktop, Discord, ...) can bring that app's window to the front (`focus_on_activate` in `hyprland.lua`).
+- The GRUB boot menu is the WinTux theme: pick Linux or Windows by moving left or right between two hands. It starts on the neutral entry in the middle; if the 30-second countdown runs out there, Linux boots.
 - Spotify, Discord (Vesktop), Dolphin and other Qt/KDE apps, the lock screen and the login screen all use the same Casu colours.
 
 ---
@@ -151,18 +162,24 @@ chsh -s /usr/bin/zsh
 
 ### 4. System files (needs sudo)
 
-Compare before overwriting, especially `pacman.conf` and `makepkg.conf`, since a newer Arch may ship newer versions of them:
+Compare before overwriting, since a newer Arch may ship newer versions of some of these files: especially `pacman.conf`, `makepkg.conf`, and the two edited GRUB scripts `grub.d/10_linux` and `grub.d/30_uefi-firmware`. If GRUB has changed those two, keep the new machine's copies (delete them from `~/dotfiles/etc/grub.d/` before copying) and just redo the one-word edit in each: add `--class gnu-linux-adv` to the "Advanced options" `submenu` line in `10_linux`, and `--class efi` to the `menuentry` line in `30_uefi-firmware`. Also check `GRUB_CMDLINE_LINUX_DEFAULT` in `etc/default/grub` still suits the machine (`nvidia_drm.modeset=1` is for an Nvidia card).
 
 ```sh
 sudo diff /etc/pacman.conf ~/dotfiles/etc/pacman.conf
+sudo diff /etc/grub.d/10_linux ~/dotfiles/etc/grub.d/10_linux
+sudo diff /etc/grub.d/30_uefi-firmware ~/dotfiles/etc/grub.d/30_uefi-firmware
 sudo cp -a ~/dotfiles/etc/. /etc/
+sudo cp -a ~/dotfiles/boot/grub/themes/. /boot/grub/themes/
+sudo grub-mkconfig -o /boot/grub/grub.cfg   # rebuild the boot menu so it uses the theme
 sudo systemctl disable getty@tty2.service   # ly takes over the second text console
 sudo systemctl enable ly@tty2.service NetworkManager.service bluetooth.service fstrim.timer
 ```
 
+A `grub` package update replaces `10_linux` and `30_uefi-firmware` with fresh copies. `09_wintux_menu` copes with that by itself (it re-tags "Advanced options" and switches `10_linux` off again every time the menu is rebuilt), but the UEFI settings entry loses its picture until the `--class efi` edit is redone.
+
 ### 5. Reboot
 
-Needed for the login screen (ly) and the fan-sensor driver. At the ly login screen pick **Hyprland** (the plain one, not "uwsm").
+Needed for the login screen (ly) and the fan-sensor driver, and to see the new boot menu. At the ly login screen pick **Hyprland** (the plain one, not "uwsm").
 
 ### 6. After the first login
 

@@ -1,0 +1,62 @@
+#! /bin/sh
+set -e
+
+# grub-mkconfig helper script for the WinTux Dualboot Fullscreen theme.
+#
+# Lays the top-level menu out left to right, so the arrow keys move between
+# the hands:
+#
+#   Advanced Linux | Linux | neutral (default) | Windows | UEFI settings
+#
+# It runs 10_linux itself and prints the "Advanced options" submenu before
+# the main Linux entry, followed by a neutral entry that shows both hands
+# dimmed. Windows and UEFI settings come after it from the later scripts.
+#
+# 10_linux is switched off (chmod -x) so its entries are not printed twice.
+# A grub package update switches it back on, so this is redone on every run;
+# grub-mkconfig only checks whether 10_linux is executable when it gets to it.
+#
+# The neutral entry loads nothing: pressing Enter on it returns to the menu.
+# When the countdown runs out on it, GRUB boots the "fallback" entry instead,
+# which is set to the main Linux entry.
+#
+# To undo: delete this file, then run
+#   chmod +x /etc/grub.d/10_linux && grub-mkconfig -o /boot/grub/grub.cfg
+
+linux_script="$(dirname "$0")/10_linux"
+
+if [ ! -f "${linux_script}" ]; then
+  exit 0
+fi
+
+chmod -x "${linux_script}" 2>/dev/null || true
+
+sh "${linux_script}" | awk '
+  # Split the 10_linux output into top-level blocks by brace depth.
+  depth == 0 && /^submenu / {
+    block = "adv"
+    if ($0 !~ /--class gnu-linux-adv/)
+      sub(/ \$menuentry_id_option/, " --class gnu-linux-adv $menuentry_id_option")
+  }
+  depth == 0 && /^menuentry / { block = (have_main ? "rest" : "main"); have_main = 1 }
+  depth == 0 && !/^(submenu|menuentry) / { block = "pre" }
+  {
+    if (depth == 0 && /^(submenu|menuentry) /)
+      count[block]++
+    text[block] = text[block] $0 "\n"
+    if ($0 ~ /[{][ \t]*$/) depth++
+    if ($0 ~ /^[ \t]*[}][ \t]*$/) depth--
+  }
+  END {
+    # Order: anything else, Advanced, main Linux entry (next to neutral).
+    printf "%s%s%s%s", text["pre"], text["rest"], text["adv"], text["main"]
+    if (count["main"])
+      printf "set fallback=%d\n", count["rest"] + count["adv"]
+  }
+'
+
+cat << 'EOF'
+menuentry '← Linux | Windows →' --class neutral $menuentry_id_option 'wintux-neutral' {
+	true
+}
+EOF

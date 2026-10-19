@@ -20,6 +20,7 @@ The folders mirror where the files live on the computer:
 | `home/` | your home folder (`~`) | no |
 | `etc/` | `/etc` (system-wide settings) | yes |
 | `boot/` | `/boot` (the GRUB boot menu theme) | yes |
+| `firefox/` | your Firefox profile folder (its name is random, so it's copied by hand, see step 6) | no |
 | `packages/pacman.txt` | list of programs installed from the official Arch repos | – |
 | `packages/aur.txt` | list of programs installed from the AUR (community packages, built with `yay`) | – |
 
@@ -65,6 +66,14 @@ The folders mirror where the files live on the computer:
 | `default/grub` | GRUB boot menu settings: uses the WinTux theme, 2560×1440, 30-second countdown, starts on the neutral entry, looks for Windows (os-prober), and the `nvidia_drm.modeset=1` boot option |
 | `grub.d/09_wintux_menu` | Lays the boot menu out left to right (Advanced Linux, Linux, neutral, Windows, UEFI settings) so the arrow keys move between the two hands. It switches off the stock `10_linux` and prints its entries itself, in that order |
 | `grub.d/10_linux`, `grub.d/30_uefi-firmware` | The stock GRUB scripts with one small edit each (`--class gnu-linux-adv` / `--class efi`), which tells the theme which picture to show for "Advanced options" and "UEFI settings" |
+
+### Firefox (`firefox/`)
+
+| File | What it does |
+| --- | --- |
+| `user.js` | Switches on the hidden setting that lets Firefox load the two style files below |
+| `chrome/userChrome.css` | Firefox's frame (tab strip, toolbar, menus, panels, sidebar) in the bar colour `#0F0F17`; address bar, search fields and the selected tab one shade lighter (`#1A1A26`). Uses Firefox 158's colour names, which change between versions |
+| `chrome/userContent.css` | The new tab / home page and blank tabs in the same colours |
 
 ### Boot menu theme (`boot/`)
 
@@ -187,6 +196,7 @@ Needed for the login screen (ly) and the fan-sensor driver, and to see the new b
 ### 6. After the first login
 
 - **Keyring:** the first time an app wants to save a password, create a keyring named **login** with the **same password as your user account**. That's what makes it unlock on login. (If you later change your login password with `passwd`, the keyring won't follow.)
+- **Firefox colours:** open Firefox once and close it, so it makes its profile folder. Find that folder under "Root Directory" in `about:profiles`, then `cp -a ~/dotfiles/firefox/. <that folder>/` and start Firefox again.
 - **Spotify theme:** open Spotify once and close it, then run `spicetify backup apply`.
 - **Blue Yeti volume:** with WirePlumber doing the volume in software, set the Yeti's own hardware volume to full once and save it:
   ```sh
@@ -206,4 +216,4 @@ Needed for the login screen (ly) and the fan-sensor driver, and to see the new b
 
 ## Not included (on purpose)
 
-Passwords, tokens and login data (`~/.claude.json`, keyrings, browser profiles), app caches, the Spicetify backup of Spotify's original files, and the unused rofi theme pack.
+Passwords, tokens and login data (`~/.claude.json`, keyrings, browser profiles apart from the three Firefox style files), app caches, the Spicetify backup of Spotify's original files, and the unused rofi theme pack.

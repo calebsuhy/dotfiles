@@ -1,0 +1,20 @@
+/* Firefox's own frame (tab strip, toolbar, address bar, menus and panels)
+   in the bar and Alacritty colour, #0F0F17. The address bar, search fields
+   and the selected tab are one shade lighter so they still stand out.
+   Variable names are Firefox 158's; older versions used different ones. */
+:root {
+  /* tab strip, toolbar and bookmarks bar */
+  --toolbox-background-color:           #0f0f17 !important;
+  --toolbox-background-color-inactive:  #0f0f17 !important;
+  --toolbar-background-color:           #0f0f17 !important;
+  --tab-background-color-selected:      #1a1a26 !important;
+
+  /* address bar and search fields */
+  --toolbar-field-background-color:        #1a1a26 !important;
+  --toolbar-field-background-color-focus:  #1a1a26 !important;
+
+  /* behind web pages while they load, the sidebar, menus and pop-up panels */
+  --tabpanel-background-color:  #0f0f17 !important;
+  --sidebar-background-color:   #0f0f17 !important;
+  --panel-background-color:     #0f0f17 !important;
+}

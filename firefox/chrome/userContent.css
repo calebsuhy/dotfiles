@@ -1,0 +1,12 @@
+/* The new tab / home page and blank tabs in the bar and Alacritty colour,
+   #0F0F17; the new tab's search box and shortcut tiles one shade lighter */
+@-moz-document url("about:newtab"), url("about:home"), url("about:privatebrowsing") {
+  :root, body {
+    --newtab-background-color:            #0f0f17 !important;
+    --newtab-background-color-secondary:  #1a1a26 !important;
+    background-color: #0f0f17 !important;
+  }
+}
+@-moz-document url("about:blank") {
+  html { background-color: #0f0f17 !important; }
+}

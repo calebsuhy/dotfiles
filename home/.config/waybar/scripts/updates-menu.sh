@@ -30,20 +30,31 @@ pkill -USR1 -f 'waybar/scripts/updates\.sh$'
 
 # "name old -> new" lines; AUR ones get a faint "AUR" tag
 list=$(awk '{
-    tag = ($5 == "AUR") ? "  <span alpha=\"55%\">AUR</span>" : ""
+    tag = ($NF == "AUR") ? "  <span alpha=\"55%\">AUR</span>" : ""
     printf "<b>%s</b>  <span alpha=\"55%%\">%s →</span> %s%s\n", $1, $2, $4, tag
 }' "$cache" 2>/dev/null)
 n=$(printf '%s' "$list" | grep -c .)
 
 if [ "$n" -eq 0 ]; then
     list="<i>Everything is up to date</i>"
-    # nothing to upgrade: the footer only offers Close
+    # nothing to upgrade: the footer only offers Close, and the lone row
+    # gets no ❯ marker
     footer="button-close"
+    row="element-text"
 else
     footer="button-upgrade\", \"textbox-dot\", \"button-close"
+    row="textbox-arrow\", \"element-text"
 fi
 # room for every row, up to 10 (scroll for more)
 lines=$n; [ "$lines" -lt 1 ] && lines=1; [ "$lines" -gt 10 ] && lines=10
+
+# Longer lists get a scrollbar. The wheel and arrow keys move the red ❯ one
+# row at a time; with continuous scrolling (-scroll-method 1) the list starts
+# moving once the ❯ reaches the middle row. rofi places the scrollbar by the
+# ❯'s row, so the two always line up, and the bar starts at the top. No
+# wrapping from the last row back to the first.
+scroll=""
+[ "$n" -gt 10 ] && scroll="scrollbar: true; cycle: false;"
 
 # Layout: centred title (the search box is hidden; an invisible copy of the
 # icon after the words balances the one before them, so "Updates (n)" itself
@@ -54,13 +65,15 @@ lines=$n; [ "$lines" -lt 1 ] && lines=1; [ "$lines" -gt 10 ] && lines=10
 # Enter is moved off "accept" (which would pick a row) onto kb-custom-1, which
 # makes rofi exit with status 10 no matter what's highlighted; the "Upgrade
 # all" button triggers the same. Rows are marked nonselectable (added in the
-# pipe, as the shell can't keep the NUL byte that starts it in a variable)
-# and the highlight is styled like any other row, so nothing looks selected.
+# pipe, as the shell can't keep the NUL byte that starts it in a variable).
+# The highlighted row gets a red ❯ like the other menus, but here it only
+# marks where you are in the list: Enter upgrades everything either way.
 # (No -no-custom: with it, rofi ignores Enter when no row is selectable.)
 printf '%s\n' "$list" | sed 's/$/\x00nonselectable\x1ftrue/' |
 rofi -dmenu -i -markup-rows -p "󰏗 Updates ($n) <span alpha='1'>󰏗</span>" \
     -kb-accept-entry "Control+j" -kb-custom-1 "Return,KP_Enter" \
     -me-select-entry "" -me-accept-entry "" \
+    -scroll-method 1 \
     -theme "$theme" -theme-str "
         window { location: south west; anchor: south west;
                  x-offset: $x_offset; y-offset: $y_offset; width: 540px;
@@ -72,10 +85,19 @@ rofi -dmenu -i -markup-rows -p "󰏗 Updates ($n) <span alpha='1'>󰏗</span>" \
         prompt { padding: 5px 0px; expand: false; markup: true; }
         mainbox { padding: 14px; spacing: 8px;
                   children: [ \"inputbar\", \"listview\", \"footer\" ]; }
-        listview { lines: $lines; spacing: 4px; }
-        element { padding: 7px; children: [ \"element-text\" ]; }
-        element, element selected.normal, element normal.normal, element alternate.normal, element normal.active, element selected.active {
-            background-color: transparent; text-color: #FFFFFF; }
+        listview { lines: $lines; spacing: 4px; $scroll }
+        scrollbar { handle-width: 4px; handle-color: #C55449;
+                    background-color: #3A3A4A; margin: 0px 0px 0px 6px; }
+        element { padding: 7px; background-color: transparent;
+                  text-color: transparent; children: [ \"$row\" ]; }
+        textbox-arrow { str: \"❯\"; expand: false; padding: 0px 10px 0px 0px;
+                        background-color: transparent; text-color: inherit;
+                        vertical-align: 0.5; }
+        element-text { text-color: #FFFFFF; }
+        element selected.normal { background-color: transparent;
+                                  text-color: #C55449; }
+        element normal.normal, element alternate.normal {
+            background-color: transparent; text-color: transparent; }
         footer { orientation: horizontal; expand: false; spacing: 0px;
                  padding: 10px 0px 0px; background-color: transparent;
                  border: 1px 0px 0px; border-color: #3A3A4A;

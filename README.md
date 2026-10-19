@@ -168,12 +168,14 @@ Compare before overwriting, since a newer Arch may ship newer versions of some o
 sudo diff /etc/pacman.conf ~/dotfiles/etc/pacman.conf
 sudo diff /etc/grub.d/10_linux ~/dotfiles/etc/grub.d/10_linux
 sudo diff /etc/grub.d/30_uefi-firmware ~/dotfiles/etc/grub.d/30_uefi-firmware
-sudo cp -a ~/dotfiles/etc/. /etc/
-sudo cp -a ~/dotfiles/boot/grub/themes/. /boot/grub/themes/
+sudo cp -r --preserve=mode,timestamps ~/dotfiles/etc/. /etc/
+sudo cp -r --preserve=mode,timestamps ~/dotfiles/boot/grub/themes/. /boot/grub/themes/
 sudo grub-mkconfig -o /boot/grub/grub.cfg   # rebuild the boot menu so it uses the theme
 sudo systemctl disable getty@tty2.service   # ly takes over the second text console
 sudo systemctl enable ly@tty2.service NetworkManager.service bluetooth.service fstrim.timer
 ```
+
+The copies keep their permissions and dates but **not** their owner, so they end up owned by root like the rest of `/etc` and `/boot`. (`cp -a` would copy the owner too, and since the repo's files belong to your user account, that would let your normal account edit system files like `pam.d/ly` without sudo.)
 
 A `grub` package update replaces `10_linux` and `30_uefi-firmware` with fresh copies. `09_wintux_menu` copes with that by itself (it re-tags "Advanced options" and switches `10_linux` off again every time the menu is rebuilt), but the UEFI settings entry loses its picture until the `--class efi` edit is redone.
 

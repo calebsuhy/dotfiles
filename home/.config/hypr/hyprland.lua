@@ -215,7 +215,7 @@ hl.window_rule({
 -- started the first time the scratchpad is opened (was tdrop), floating at
 -- the same size and place as before: centred on the screen.
 local scratch_home = {
-    scratch_term   = { size = { 1300, 700 }, at = { 630, 370 } },
+    scratch_term   = { size = { 1430, 770 }, at = { 565, 335 } },
     scratch_claude = { size = { 1430, 770 }, at = { 565, 335 } },
 }
 hl.workspace_rule({ workspace = "special:term",

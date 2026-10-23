@@ -42,7 +42,7 @@ hl.env("__GLX_VENDOR_LIBRARY_NAME", "nvidia")
 hl.env("QT_QPA_PLATFORMTHEME", "qt6ct")
 
 -- Names of workspaces (for use in waybar); always shown, even when empty
-local desktops = { "terminals", "claude", "firefox", "spotify", "discord" }
+local desktops = { "firefox", "claude", "terminals", "spotify", "discord" }
 for i, name in ipairs(desktops) do
     hl.workspace_rule({ workspace = tostring(i), default_name = name, persistent = true })
 end

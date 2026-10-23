@@ -225,7 +225,7 @@
     "custom/ws#1": {
         "exec": "~/.config/waybar/scripts/workspace.py 1",
         "return-type": "json",
-        "format": "<span font='FiraCode Nerd Font Mono 27px' rise='-3072'></span>",
+        "format": "<span font='FiraCode Nerd Font Mono 27px' rise='-3072'></span>",
         "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = 1 })'",
         "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })'",
         "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })'",
@@ -243,7 +243,7 @@
     "custom/ws#3": {
         "exec": "~/.config/waybar/scripts/workspace.py 3",
         "return-type": "json",
-        "format": "<span font='FiraCode Nerd Font Mono 27px' rise='-3072'></span>",
+        "format": "<span font='FiraCode Nerd Font Mono 27px' rise='-3072'></span>",
         "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = 3 })'",
         "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })'",
         "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })'",

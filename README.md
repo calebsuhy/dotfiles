@@ -114,7 +114,7 @@ Caps Lock acts as Escape. Key repeat: 175 ms delay, 60 per second.
 
 ### The bar (bottom of the screen)
 
-- **Left:** workspaces 1-5 (terminals, claude, firefox, spotify, discord) with a red underline on the active one; Claude session count; CPU temperature and usage; GPU; **fans** ("CPU rpm · GPU rpm", needs the it87 files in `etc/`); memory; disk (space used on `/` and how full it is); **updates** count.
+- **Left:** workspaces 1-5 (firefox, claude, terminals, spotify, discord) with a red underline on the active one; Claude session count; CPU temperature and usage; GPU; **fans** ("CPU rpm · GPU rpm", needs the it87 files in `etc/`); memory; disk (space used on `/` and how full it is); **updates** count.
 - **Centre, now playing:** artist, title and time of the current song (Spotify first, else any player), dims while paused, with previous/play/next buttons. Clicking the song jumps to the Spotify workspace.
 - **Right:** network speed; **Wi-Fi drawer** (click the icon to slide the network name out, click the name for the Wi-Fi menu); notification **bell**; tray; **volume** (scroll to change, click to mute: the icon slides over the number); **clock drawer** (click to slide the full date out); **power** button.
 - No hover tooltips anywhere.

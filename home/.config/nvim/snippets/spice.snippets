@@ -150,11 +150,11 @@ V${1:dd} ${2:vdd} ${3:0} dc ${4:1}
 endsnippet
 
 snippet vpulse "pulse source: v1 v2 delay rise fall width period"
-V${1:in} ${2:in} ${3:0} pulse(${4:0} ${5:1} ${6:0} ${7:10p} ${8:10p} ${9:1n} ${10:2n})
+V${1:in} ${2:in} ${3:0} pulse(${4:v1} ${5:v2} ${6:td} ${7:tr} ${8:tf} ${9:pw} ${10:per})
 endsnippet
 
 snippet pulse "pulse(v1 v2 delay rise fall width period)"
-pulse(${1:0} ${2:1} ${3:0} ${4:10p} ${5:10p} ${6:1n} ${7:2n})$0
+pulse(${1:v1} ${2:v2} ${3:td} ${4:tr} ${5:tf} ${6:pw} ${7:per})$0
 endsnippet
 
 snippet vsin "sine source: offset amplitude freq"

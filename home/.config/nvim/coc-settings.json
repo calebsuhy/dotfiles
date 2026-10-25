@@ -2,6 +2,7 @@
     "suggest.enablePreselect": false,
     "suggest.noselect": true,
     "snippets.userSnippetsDirectory": "~/.config/nvim/snippets",
+    "snippets.snipmate.enable": false,
     "languageserver": {
         "svlangserver": {
             "command": "svlangserver",

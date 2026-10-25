@@ -1,6 +1,7 @@
 {
     "suggest.enablePreselect": false,
     "suggest.noselect": true,
+    "snippets.userSnippetsDirectory": "~/.config/nvim/snippets",
     "languageserver": {
         "svlangserver": {
             "command": "svlangserver",
@@ -14,5 +15,6 @@
             }
         }
     },
-    "clangd.path": "~/.config/coc/extensions/coc-clangd-data/install/19.1.2/clangd_19.1.2/bin/clangd"
+    "clangd.path": "~/.config/coc/extensions/coc-clangd-data/install/19.1.2/clangd_19.1.2/bin/clangd",
+    "snippets.ultisnips.pythonPrompt": false
 }

@@ -1,0 +1,174 @@
+# ngspice snippets for coc-snippets (UltiSnips format)
+# type the trigger word, pick it from the menu with <Tab>, accept with <C-y>,
+# then <Tab>/<S-Tab> jump between the fields
+
+# --- whole files and blocks ---
+
+snippet cir "new netlist: title, circuit, .control, .end"
+* ${1:title}
+
+${2:* circuit here}
+
+.control
+set noaskquit
+${3:op}
+$0
+.endc
+
+.end
+endsnippet
+
+snippet ctrl ".control ... .endc"
+.control
+set noaskquit
+$0
+.endc
+endsnippet
+
+snippet subckt ".subckt ... .ends"
+.subckt ${1:name} ${2:in out vdd}
+$0
+.ends ${1}
+endsnippet
+
+snippet model ".model (BSIM3, level=8)"
+.model ${1:nch} ${2:nmos} level=8 version=3.3.0 ${0}
+endsnippet
+
+snippet inc ".include file"
+.include "${1:file.lib}"
+endsnippet
+
+snippet lib ".lib file section"
+.lib "${1:file.lib}" ${2:tt}
+endsnippet
+
+snippet param ".param name=value"
+.param ${1:name}=${2:value}
+endsnippet
+
+snippet ic ".ic initial node voltage"
+.ic v(${1:node})=${2:0}
+endsnippet
+
+snippet opt ".option"
+.option ${1:reltol=1e-4}
+endsnippet
+
+# --- analyses (dot form, for outside .control) ---
+
+snippet .tran ".tran step stop"
+.tran ${1:10p} ${2:10n}
+endsnippet
+
+snippet .ac ".ac dec points start stop"
+.ac dec ${1:20} ${2:1} ${3:10g}
+endsnippet
+
+snippet .dc ".dc source start stop step"
+.dc ${1:vin} ${2:0} ${3:1} ${4:10m}
+endsnippet
+
+# --- analyses and commands (for inside .control) ---
+
+snippet tran "tran step stop"
+tran ${1:10p} ${2:10n}
+endsnippet
+
+snippet ac "ac dec points start stop"
+ac dec ${1:20} ${2:1} ${3:10g}
+endsnippet
+
+snippet dc "dc source start stop step"
+dc ${1:vin} ${2:0} ${3:1} ${4:10m}
+endsnippet
+
+snippet measd "meas delay: trig ... targ ..."
+meas tran ${1:tpd} trig v(${2:in}) val=${3:0.5} ${4:rise}=${5:1} targ v(${6:out}) val=${7:0.5} ${8:fall}=${9:1}
+endsnippet
+
+snippet measw "meas when v(node)=value"
+meas tran ${1:t1} when v(${2:out})=${3:0.5} ${4:rise}=${5:1}
+endsnippet
+
+snippet measf "meas avg/max/min/pp over a window"
+meas tran ${1:result} ${2:avg} ${3:v(out)} from=${4:0} to=${5:10n}
+endsnippet
+
+snippet foreach "foreach var values ... end"
+foreach ${1:v} ${2:1 2 3}
+	$0
+end
+endsnippet
+
+snippet if "if ... end"
+if ${1:\$&x > 0}
+	$0
+end
+endsnippet
+
+snippet alter "alterparam name = value"
+alterparam ${1:name} = ${2:\$v}
+endsnippet
+
+snippet echov "echo a measured value"
+echo "${1:label} = \$&${2:name}"
+endsnippet
+
+snippet let "let name = expression"
+let ${1:name} = ${2:expr}
+endsnippet
+
+snippet wrdata "write vectors to a text file"
+wrdata ${1:out.txt} ${2:v(out)}
+endsnippet
+
+# --- components ---
+
+snippet nmos "NMOS: d g s b model W L"
+M${1:n} ${2:d} ${3:g} ${4:0} ${5:0} ${6:nch} W=${7:0.2u} L=${8:0.1u}
+endsnippet
+
+snippet pmos "PMOS: d g s b model W L"
+M${1:p} ${2:d} ${3:g} ${4:vdd} ${5:vdd} ${6:pch} W=${7:0.4u} L=${8:0.1u}
+endsnippet
+
+snippet res "resistor"
+R${1:1} ${2:a} ${3:b} ${4:1k}
+endsnippet
+
+snippet cap "capacitor"
+C${1:1} ${2:a} ${3:0} ${4:1f}
+endsnippet
+
+snippet ind "inductor"
+L${1:1} ${2:a} ${3:b} ${4:1n}
+endsnippet
+
+snippet vdc "DC voltage source"
+V${1:dd} ${2:vdd} ${3:0} dc ${4:1}
+endsnippet
+
+snippet vpulse "pulse source: v1 v2 delay rise fall width period"
+V${1:in} ${2:in} ${3:0} pulse(${4:0} ${5:1} ${6:0} ${7:10p} ${8:10p} ${9:1n} ${10:2n})
+endsnippet
+
+snippet vsin "sine source: offset amplitude freq"
+V${1:in} ${2:in} ${3:0} sin(${4:0} ${5:1} ${6:1meg})
+endsnippet
+
+snippet vpwl "piecewise-linear source: time value pairs"
+V${1:in} ${2:in} ${3:0} pwl(${4:0 0 1n 1})
+endsnippet
+
+snippet vac "AC small-signal source"
+V${1:in} ${2:in} ${3:0} dc ${4:0} ac ${5:1}
+endsnippet
+
+snippet idc "DC current source"
+I${1:1} ${2:a} ${3:0} dc ${4:1u}
+endsnippet
+
+snippet x "subcircuit instance"
+X${1:1} ${2:in out vdd} ${3:name}
+endsnippet

@@ -24,12 +24,14 @@ go
 grim
 grub
 gst-plugins-base
+gtkwave
 htop
 hypridle
 hyprland
 hyprlock
 hyprpaper
 hyprpolkitagent
+iverilog
 iwd
 klayout
 linux
@@ -38,9 +40,11 @@ linux-headers
 ly
 neovim
 networkmanager
+ngspice
 npm
 nvidia-open
 nvidia-settings
+openmpi
 os-prober
 pacman-contrib
 papirus-icon-theme
@@ -63,6 +67,7 @@ ttf-firacode-nerd
 ttf-nerd-fonts-symbols
 ttf-nerd-fonts-symbols-mono
 unzip
+verilator
 vim
 vlc
 waybar
@@ -110,6 +115,7 @@ xorg-xwayland
 xorg-xwd
 xorg-xwininfo
 xorg-xwud
+yosys
 zathura-pdf-mupdf
 zip
 zsh

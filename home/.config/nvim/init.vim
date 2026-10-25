@@ -63,6 +63,10 @@ set shiftwidth=4 " << and >> commands shift lines 4 columns to the left and righ
 set expandtab " tabs are turned into the equivalent ammount of spaces
 autocmd FileType html setlocal shiftwidth=2 tabstop=2 wrap linebreak " changes settings for html
 
+" ngspice netlists (.cir/.ckt) use the spice filetype, like .sp and .spice already do
+autocmd BufRead,BufNewFile *.cir,*.ckt setfiletype spice
+let g:NERDCustomDelimiters = { 'spice': { 'left': '*' } } " comment spice lines with * instead of $
+
 " searching
 set incsearch " enables incremental searching
 set hlsearch " highlights search results
@@ -96,6 +100,8 @@ endif
 
 " tab completion for coc.vim
 " use <tab> for trigger completion and navigate to the next complete item
+" <C-y> accepts an item (and expands it if it's a snippet)
+" inside a snippet, <tab>/<S-tab> jump to the next/previous field
 function! CheckBackspace() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
@@ -103,5 +109,8 @@ endfunction
 
 inoremap <silent><expr> <TAB>
       \ coc#pum#visible() ? coc#pum#next(1) :
+      \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
       \ CheckBackspace() ? "\<Tab>" :
       \ coc#refresh()
+let g:coc_snippet_next = '<tab>'
+let g:coc_snippet_prev = '<S-tab>'

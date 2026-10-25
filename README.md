@@ -47,7 +47,7 @@ The folders mirror where the files live on the computer:
 | `.config/spicetify/` | Spotify theme "Casu" + `spotify-themed.sh` wrapper |
 | `.local/share/applications/spotify-launcher.desktop` | Makes the Spotify menu entry start the themed version |
 | `.config/vesktop/settings/` | Discord (Vesktop) custom CSS and settings |
-| `.config/nvim/` | Neovim |
+| `.config/nvim/` | Neovim (vim-plug + coc.nvim completion). Also ngspice support: `.cir`/`.ckt` files open as SPICE, extra highlighting in `after/syntax/spice.vim`, and about 40 netlist templates in `snippets/spice.snippets` (Tab picks from the menu, Ctrl+Y accepts, Tab jumps between fields) |
 | `.config/flameshot/` | Screenshot tool settings |
 | `.config/mimeapps.list` | Which app opens which file type |
 | `.claude/` | Claude Code: global instructions, settings, and the desktop notification hook |
@@ -209,6 +209,13 @@ Needed for the login screen (ly) and the fan-sensor driver, and to see the new b
   gsettings set org.gnome.desktop.interface document-font-name 'Iosevka 11'
   gsettings set org.gnome.desktop.interface monospace-font-name 'Iosevka 11'
   ```
+- **Neovim plugins:** install vim-plug (the plugin manager), then let it fetch the plugins and add coc's language extensions:
+  ```sh
+  curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  nvim +PlugInstall +qa
+  nvim +'CocInstall -sync coc-clangd coc-pyright coc-snippets' +qa
+  ```
+  Keep coc.nvim up to date (`:PlugUpdate coc.nvim`): old versions leave their pop-up boxes stuck on screen with newer Neovim.
 - **Claude Code:** sign in with `claude`, then reinstall the claude-hud status line plugin (`/plugin`).
 - Restart pieces after edits: `pkill dunst` (it restarts itself on the next notification), Super+Shift+R for the bar.
 

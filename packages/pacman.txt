@@ -82,6 +82,7 @@ xorg-font-util
 xorg-fonts-100dpi
 xorg-fonts-75dpi
 xorg-fonts-encodings
+xorg-fonts-misc
 xorg-iceauth
 xorg-mkfontscale
 xorg-server-common

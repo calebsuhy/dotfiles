@@ -100,7 +100,7 @@ endif
 
 " tab completion for coc.vim
 " use <tab> for trigger completion and navigate to the next complete item
-" <C-y> accepts an item (and expands it if it's a snippet)
+" <CR> (or <C-y>) accepts the highlighted item (and expands it if it's a snippet)
 " inside a snippet, <tab>/<S-tab> jump to the next/previous field
 function! CheckBackspace() abort
   let col = col('.') - 1
@@ -112,5 +112,9 @@ inoremap <silent><expr> <TAB>
       \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
       \ CheckBackspace() ? "\<Tab>" :
       \ coc#refresh()
+" <CR> only accepts once an item is highlighted, so Enter still starts a new line otherwise
+inoremap <silent><expr> <CR>
+      \ coc#pum#visible() && coc#pum#info()['index'] >= 0 ? coc#pum#confirm() :
+      \ "\<C-g>u\<CR>\<C-r>=coc#on_enter()\<CR>"
 let g:coc_snippet_next = '<tab>'
 let g:coc_snippet_prev = '<S-tab>'

@@ -102,12 +102,14 @@ endif
 " use <tab> for trigger completion and navigate to the next complete item
 " <CR> (or <C-y>) accepts the highlighted item (and expands it if it's a snippet)
 " inside a snippet, <tab>/<S-tab> jump to the next/previous field
+" (even with the menu open, unless an item was highlighted first with <C-n>/<Down>)
 function! CheckBackspace() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
 inoremap <silent><expr> <TAB>
+      \ coc#pum#visible() && coc#pum#info()['index'] < 0 && coc#jumpable() ? "\<C-r>=coc#snippet#next()\<CR>" :
       \ coc#pum#visible() ? coc#pum#next(1) :
       \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
       \ CheckBackspace() ? "\<Tab>" :

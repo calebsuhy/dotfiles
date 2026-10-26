@@ -47,7 +47,7 @@ The folders mirror where the files live on the computer:
 | `.config/spicetify/` | Spotify theme "Casu" + `spotify-themed.sh` wrapper |
 | `.local/share/applications/spotify-launcher.desktop` | Makes the Spotify menu entry start the themed version |
 | `.config/vesktop/settings/` | Discord (Vesktop) custom CSS and settings |
-| `.config/nvim/` | Neovim (vim-plug + coc.nvim completion). Also ngspice support: `.cir`/`.ckt` files open as SPICE, extra highlighting in `after/syntax/spice.vim`, and about 40 netlist templates in `snippets/spice.snippets` (Tab picks from the menu, Enter (or Ctrl+Y) accepts, Tab jumps between fields) |
+| `.config/nvim/` | Neovim (vim-plug + coc.nvim completion). Also ngspice support: `.cir`/`.ckt` files open as SPICE, extra highlighting in `after/syntax/spice.vim`, and about 40 netlist templates in `snippets/spice.snippets` (Tab picks from the menu, Enter (or Ctrl+Y) accepts, Tab jumps between fields, even when the word menu pops up while typing in one; highlight a menu item first with Ctrl+N or Down to pick from it) |
 | `.config/flameshot/` | Screenshot tool settings |
 | `.config/mimeapps.list` | Which app opens which file type |
 | `.claude/` | Claude Code: global instructions, settings, and the desktop notification hook |

@@ -61,6 +61,7 @@ The folders mirror where the files live on the computer:
 | `ly/config.ini` | ly, the text-mode login screen (colours, big clock) |
 | `pam.d/ly` | Unlocks the GNOME keyring automatically when you log in (saved Wi-Fi/app passwords) |
 | `pacman.conf` | Coloured pacman output, `ILoveCandy`, 5 parallel downloads, verbose package lists |
+| `xdg/reflector/reflector.conf` | Reflector settings: every week it rebuilds `/etc/pacman.d/mirrorlist` with the 10 fastest of the 20 most up-to-date US download servers (HTTPS only), so updates stay fast |
 | `makepkg.conf` | `!debug` in OPTIONS so AUR builds don't make extra `-debug` packages |
 | `modules-load.d/it87.conf` + `modprobe.d/it87.conf` | Loads the motherboard's fan-sensor driver (it87) so the bar can show CPU fan speed |
 | `default/grub` | GRUB boot menu settings: uses the WinTux theme, 2560×1440, 30-second countdown, starts on the neutral entry, looks for Windows (os-prober), and the `nvidia_drm.modeset=1` boot option |
@@ -182,7 +183,8 @@ sudo cp -r --preserve=mode,timestamps ~/dotfiles/etc/. /etc/
 sudo cp -r --preserve=mode,timestamps ~/dotfiles/boot/grub/themes/. /boot/grub/themes/
 sudo grub-mkconfig -o /boot/grub/grub.cfg   # rebuild the boot menu so it uses the theme
 sudo systemctl disable getty@tty2.service   # ly takes over the second text console
-sudo systemctl enable ly@tty2.service NetworkManager.service bluetooth.service fstrim.timer
+sudo systemctl enable ly@tty2.service NetworkManager.service bluetooth.service fstrim.timer reflector.timer
+sudo systemctl start reflector.service   # pick the fastest download servers now (takes about 30 seconds)
 ```
 
 The copies keep their permissions and dates but **not** their owner, so they end up owned by root like the rest of `/etc` and `/boot`. (`cp -a` would copy the owner too, and since the repo's files belong to your user account, that would let your normal account edit system files like `pam.d/ly` without sudo.)

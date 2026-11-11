@@ -86,7 +86,12 @@ configuration {
 	font: "Mono 12";
 	sort: false;
 	threads: 0;
-	click-to-exit: true;
+	/* Off: Hyprland closes menus on an outside click instead (the mouse:272
+	   rule in ~/.config/hypr/hyprland.lua), and the click still reaches what
+	   you clicked. Since rofi 2.1, leaving this on makes rofi cover the whole
+	   screen with an invisible layer, which swallows those clicks and moves
+	   every menu that uses x-offset/y-offset to the wrong spot. */
+	click-to-exit: false;
 /*	ignored-prefixes: "";*/
 /*	pid: "/run/user/1000/rofi.pid";*/
 

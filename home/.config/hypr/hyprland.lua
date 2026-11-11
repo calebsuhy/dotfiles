@@ -218,13 +218,22 @@ local scratch_home = {
     scratch_term   = { size = { 1430, 770 }, at = { 565, 335 } },
     scratch_claude = { size = { 1430, 770 }, at = { 565, 335 } },
 }
-hl.workspace_rule({ workspace = "special:term",
-    on_created_empty = "alacritty --class scratch_term" })
 -- The Claude scratchpad starts a fresh Claude conversation each time its
 -- window is created (first Super+C, or the first one after closing it with
 -- Super+Shift+Q); exiting Claude leaves a normal shell there.
-hl.workspace_rule({ workspace = "special:claude",
-    on_created_empty = [[alacritty --class scratch_claude -e zsh -c 'claude; exec zsh']] })
+-- (Hyprland 0.57 replaced the old on_created_empty workspace rule with this
+-- "workspace created" handler: when a scratchpad's workspace appears with
+-- nothing in it, start its window there.)
+local scratch_programs = {
+    ["special:term"]   = "alacritty --class scratch_term",
+    ["special:claude"] = [[alacritty --class scratch_claude -e zsh -c 'claude; exec zsh']],
+}
+hl.on("workspace.created", function(workspace)
+    local program = scratch_programs[workspace.name]
+    if program and workspace.is_empty then
+        hl.exec_cmd(program, { workspace = workspace.name })
+    end
+end)
 for class, home in pairs(scratch_home) do
     hl.window_rule({
         name  = class,
